@@ -42,21 +42,31 @@ jobs:
           # Move UPX executable to main `upx` folder for easier access
           Move-Item -Path .\upx\*\upx.exe -Destination .\upx\upx.exe
 
-      # Step 5: Build executable with Nuitka
+      # Step 5: Install Dependency Walker
+      - name: Download and Install Dependency Walker
+        run: |
+          # Download Dependency Walker
+          Invoke-WebRequest -Uri https://dependencywalker.com/depends.zip -OutFile depends.zip
+          Expand-Archive -Path depends.zip -DestinationPath dependency_walker
+
+          # Add Dependency Walker to PATH
+          $env:Path += ";$PWD\\dependency_walker"
+
+      # Step 6: Build executable with Nuitka
       - name: Build executable with Nuitka
         run: |
-          nuitka --standalone --onefile --windows-icon-from-ico=assets/appl.ico --enable-plugin=tk-inter src/color_palette_creator.py
+          nuitka --standalone --onefile --windows-icon-from-ico=assets/appl.ico --enable-plugin=tk-inter --enable-plugin=no-qt src/color_palette_creator.py
           if (Test-Path "color_palette_creator.dist\\color_palette_creator.exe") {
               Move-Item -Path "color_palette_creator.dist\\color_palette_creator.exe" -Destination "."
           }
 
-      # Step 6: Compress executable with UPX (optional)
+      # Step 7: Compress executable with UPX (optional)
       - name: Compress executable with UPX
         if: success()
         run: |
           .\upx\upx.exe --best --lzma color_palette_creator.exe
 
-      # Step 7: Create GitHub Release
+      # Step 8: Create GitHub Release
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
@@ -64,3 +74,5 @@ jobs:
             color_palette_creator.exe
             src/color_palette_creator.py
             requirements.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

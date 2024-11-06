@@ -6,17 +6,16 @@ from matplotlib.patches import Rectangle
 from collections import Counter
 import colorsys
 import tkinter as tk
-from tkinter import filedialog, messagebox
+from tkinter import filedialog
 from tkinter import ttk
 import sv_ttk
-import os
-
+import math
+from scipy.spatial import distance
 
 def resize_image(image, width=600):
     aspect_ratio = float(image.shape[1]) / float(image.shape[0])
     height = int(width / aspect_ratio)
     return cv2.resize(image, (width, height))
-
 
 def extract_dominant_colors(image, k=10):
     # Reshape image to be a list of pixels
@@ -29,10 +28,7 @@ def extract_dominant_colors(image, k=10):
     labels = kmeans.labels_
 
     # Filter out colors that are mostly black or white
-    filtered_colors = []
-    for color in colors:
-        if not (np.mean(color) < 30 or np.mean(color) > 225):
-            filtered_colors.append(color)
+    filtered_colors = [color for color in colors if not (np.all(color == [0, 0, 0]) or np.all(color == [255, 255, 255]))]
 
     # Count each label frequency and keep only those in filtered colors
     counts = Counter(labels)
@@ -43,22 +39,43 @@ def extract_dominant_colors(image, k=10):
 
     return sorted_colors, labels
 
-def group_bottom_colors(image, num_colors=10):
-  # Reshape the image to pixels
-    pixels = image.reshape((-1, 3))
+def group_bottom_colors(image, top_colors, num_colors=10, similarity_threshold=50):
+    def recursive_group_colors(image, top_colors, num_colors, similarity_threshold):
+        # Reshape the image to pixels
+        pixels = image.reshape((-1, 3))
 
-    # Apply KMeans clustering to find bottom colors
-    kmeans = KMeans(n_clusters=num_colors)
-    kmeans.fit(pixels)
-    colors = kmeans.cluster_centers_
+        # Apply KMeans clustering to find colors
+        kmeans = KMeans(n_clusters=num_colors * 2)  # Use more clusters initially to allow filtering
+        kmeans.fit(pixels)
+        colors = kmeans.cluster_centers_
 
-    # Filter out colors that are mostly black or white
-    filtered_colors = []
-    for color in colors:
-        if not (np.mean(color) < 30 or np.mean(color) > 225):
-            filtered_colors.append(color)
+        # Sort colors based on their brightness to identify highlight colors
+        def brightness(color):
+            return np.sqrt(0.299 * (color[0] ** 2) + 0.587 * (color[1] ** 2) + 0.114 * (color[2] ** 2))
 
-    return filtered_colors
+        sorted_colors = sorted(colors, key=brightness, reverse=True)
+
+        # Filter out colors that are mostly black or white
+        filtered_colors = [color for color in sorted_colors if not (np.all(color == [0, 0, 0]) or np.all(color == [255, 255, 255]))]
+
+        # Remove colors that are too similar to the top colors
+        def is_similar(c1, c2, threshold):
+            return np.linalg.norm(c1 - c2) < threshold
+
+        highlight_colors = []
+        for color in filtered_colors:
+            if not any(is_similar(color, top_color, similarity_threshold) for top_color in top_colors):
+                highlight_colors.append(color)
+            if len(highlight_colors) >= num_colors:
+                break
+
+        # If not enough highlight colors found, decrease threshold and retry
+        if len(highlight_colors) < num_colors and similarity_threshold > 0:
+            return recursive_group_colors(image, top_colors, num_colors, similarity_threshold - 5)
+
+        return highlight_colors
+
+    return recursive_group_colors(image, top_colors, num_colors, similarity_threshold)
 
 
 def adjust_brightness(color, factor):
@@ -149,38 +166,13 @@ def combine_color_palettes(output_file='combined_palette.png', *input_files):
     plt.imsave(output_file, combined_image)
 
 
-def save_color_images(image, colors, labels, output_folder='color_samples', threshold_factor=0.1):
-    if not os.path.exists(output_folder):
-        os.makedirs(output_folder)
-
-    # Create masks for each color and save the corresponding images
-    for i, color in enumerate(colors):
-        # Calculate dynamic color distance threshold based on color variation in the image
-        mean_color_distance = np.mean([np.linalg.norm(pixel - color) for pixel in image.reshape(-1, 3)])
-        threshold = threshold_factor * mean_color_distance
-
-        # Calculate color distance to find approximate matches
-        color_diff = np.linalg.norm(image - color, axis=-1)
-        mask = color_diff < threshold
-        extracted_image = np.zeros_like(image)
-        extracted_image[mask] = image[mask]
-        output_path = os.path.join(output_folder, f'color_sample_{i+1}.png')
-        plt.imsave(output_path, extracted_image)
-
-def save_top_color_samples(image, top_colors, labels, output_folder='color_samples_top_colors'):
-    save_color_images(image, top_colors, labels, output_folder=output_folder)
-
-def save_family_color_samples(image, family_colors, labels, output_folder='color_samples_family_colors'):
-    save_color_images(image, family_colors, labels, output_folder=output_folder)
-
-
 
 def create_color_palette():
     # Create a GUI window for selecting parameters
     root = tk.Tk()
     root.protocol("WM_DELETE_WINDOW", lambda: (root.quit(), root.destroy(), exit()))
     root.title("Color Palette Parameters")
-    root.geometry("500x500")  # Hard set window size  # Adjusted window size to ensure visibility
+    root.geometry("600x700")  # Adjusted window size to include new settings
     sv_ttk.set_theme("dark")
 
     # Variables to hold user input
@@ -190,7 +182,12 @@ def create_color_palette():
     hue_var = tk.StringVar(value="0/10/20/30")
     image_path = tk.StringVar(value="")
     output_folder = tk.StringVar(value="No folder selected")
-    save_samples_var = tk.BooleanVar(value=False)
+    add_compl_hues_var = tk.BooleanVar(value=False)
+    add_triadic_hues_var = tk.BooleanVar(value=False)
+    add_split_hues_var = tk.BooleanVar(value=False)
+    add_tetradic_hues_var = tk.BooleanVar(value=False)
+    add_double_brightness_var = tk.BooleanVar(value=False)
+    down_size_image_var = tk.BooleanVar(value=True)
 
     # Function to handle image selection
     def select_image():
@@ -208,20 +205,20 @@ def create_color_palette():
 
     # Function to handle submission of parameters
     def update_submit_button_state():
-      if image_path.get() != "" and output_folder.get() != "No folder selected":
-          submit_button.config(state='normal', text='Submit ❤️')
-          select_image_button.config(text="Image Selected")
-          select_folder_button.config(text="Folder Selected")
-      else:
-          submit_button.config(state='disabled', text='Submit 💔')
-          if image_path.get() == "":
-              select_image_button.config(text="Select Image")
-          else: 
-              select_image_button.config(text="Image Selected")
-          if output_folder.get() == "No folder selected":
-              select_folder_button.config(text="Select Folder")
-          else:
-              select_folder_button.config(text="Folder Selected")
+        if image_path.get() != "" and output_folder.get() != "No folder selected":
+            submit_button.config(state='normal', text='Submit ❤️')
+            select_image_button.config(text="Image Selected")
+            select_folder_button.config(text="Folder Selected")
+        else:
+            submit_button.config(state='disabled', text='Submit 💔')
+            if image_path.get() == "":
+                select_image_button.config(text="Select Image")
+            else: 
+                select_image_button.config(text="Image Selected")
+            if output_folder.get() == "No folder selected":
+                select_folder_button.config(text="Select Folder")
+            else:
+                select_folder_button.config(text="Folder Selected")
 
     def submit_parameters():
         try:
@@ -244,19 +241,21 @@ def create_color_palette():
             tk.messagebox.showerror("Input Error", str(e))
 
     # Create labeled frames for different sections
-    file_handling_frame = ttk.Labelframe(root, text="File Handling", padding=(10, 5), width=490)
-    file_handling_frame.place(x=5, y=10, width=490)
+    file_handling_frame = ttk.Labelframe(root, text="File Handling", padding=(10, 5), width=590)
+    file_handling_frame.place(x=5, y=10, width=590)
 
-    color_palette_frame = ttk.Labelframe(root, text="Color Palette Preparation", padding=(10, 5), width=490)
-    color_palette_frame.place(x=5, y=160, width=490)
+    color_palette_frame = ttk.Labelframe(root, text="Color Palette Preparation", padding=(10, 5), width=590)
+    color_palette_frame.place(x=5, y=130, width=590)
+	
+    factors_frame = ttk.Labelframe(root, text="Factors and Options", padding=(10, 5), width=590)
+    factors_frame.place(x=5, y=250, width=590)
 
-    factors_frame = ttk.Labelframe(root, text="Factors and Options", padding=(10, 5), width=490)
-    factors_frame.place(x=5, y=310, width=490)
+    settings_frame = ttk.Labelframe(root, text="Settings", padding=(10, 5), width=590)
+    settings_frame.place(x=5, y=370, width=590)
 
     ttk.Label(file_handling_frame, text="Select Input Image:").grid(row=0, column=0, sticky='w', padx=10, pady=5)
     select_image_button = ttk.Button(file_handling_frame, text="Select Image", command=select_image)
     select_image_button.grid(row=0, column=1, padx=5, pady=5, sticky='w')
-    
 
     ttk.Label(file_handling_frame, text="Select Output Folder:").grid(row=1, column=0, sticky='w', padx=10, pady=5)
     select_folder_button = ttk.Button(file_handling_frame, text="Select Folder", command=select_output_folder)
@@ -284,28 +283,73 @@ def create_color_palette():
     ttk.Label(factors_frame, text="Hue Shifts:").grid(row=1, column=0, sticky='w', padx=10, pady=5)
     ttk.Entry(factors_frame, textvariable=hue_var).grid(row=1, column=1, padx=5, pady=5)
 
-
-    ttk.Checkbutton(file_handling_frame, text="Save color sample images", variable=save_samples_var).grid(row=2, column=0, columnspan=3, sticky='w', padx=10, pady=5)
+    ttk.Label(settings_frame, text="Hue Fixed Values").grid(row=1, column=0, sticky='w', padx=10, pady=5)
+    ttk.Checkbutton(settings_frame, text="Compl", variable=add_compl_hues_var).grid(row=1, column=1, sticky='w', padx=10, pady=5)
+    ttk.Checkbutton(settings_frame, text="Triadic", variable=add_triadic_hues_var).grid(row=1, column=2, sticky='w', padx=10, pady=5)
+    ttk.Checkbutton(settings_frame, text="Split", variable=add_split_hues_var).grid(row=1, column=3, sticky='w', padx=10, pady=5)
+    ttk.Checkbutton(settings_frame, text="Tetradic", variable=add_tetradic_hues_var).grid(row=1, column=4, sticky='w', padx=10, pady=5)
+    ttk.Checkbutton(settings_frame, text="Double Brighness", variable=add_double_brightness_var).grid(row=3, column=0, sticky='w', padx=10, pady=5)
+    ttk.Checkbutton(settings_frame, text="Downsize Image", variable=down_size_image_var).grid(row=4, column=0, sticky='w', padx=10, pady=5)
 
     # Submit button
     submit_button = ttk.Button(root, text="Submit 💔", command=submit_parameters, state='disabled', width=40)
-    submit_button.place(x=50, y=450, width=400)
+    submit_button.place(x=50, y=600, width=500)
 
     root.mainloop()
+    
+    add_compl_hues = add_compl_hues_var.get()
+    add_triadic_hues = add_triadic_hues_var.get()
+    add_split_hues = add_split_hues_var.get()
+    add_tetradic_hues = add_tetradic_hues_var.get()
+    add_double_brightness = add_double_brightness_var.get()
+    down_size_image = down_size_image_var.get()
 
     # Get the user-provided parameters
     k = k_var.get()
     num_family_colors = family_colors_var.get()
     brightness_factors = [float(b) for b in brightness_var.get().split("/")]
+    
+    if add_double_brightness_var:
+        # Create a new list with the modified values
+        processed_factors = []
+        for b in brightness_factors:
+            processed_factors.append(b + (b / 2))  # Value plus half of itself
+            processed_factors.append(b - (b / 2))  # Value minus half of itself
+        # Remove duplicates by converting to a set, then back to a sorted list
+        processed_factors = sorted(set(processed_factors))
+        brightness_factors = processed_factors
+    
     hue_shifts = [float(h) for h in hue_var.get().split("/")]
-    save_samples = save_samples_var.get()
+    if add_compl_hues:
+        hue_shifts.append(180)
+
+    if add_triadic_hues:
+        hue_shifts.append(120)
+        hue_shifts.append(240)
+
+    if add_split_hues:
+        hue_shifts.append(150)
+        hue_shifts.append(210)
+
+    if add_tetradic_hues:
+        hue_shifts.append(90)
+        hue_shifts.append(180)
+        hue_shifts.append(270)
+    
+    hue_shifts = sorted(set(hue_shifts))
+    
 
     # Output the chosen parameters to console
     print(f"Number of Dominant Colors: {k}")
     print(f"Number of Family Colors: {num_family_colors}")
     print(f"Brightness Factors: {brightness_factors}")
     print(f"Hue Shifts: {hue_shifts}")
-    print(f"Save Color Samples: {save_samples}")
+    print(f"Add Complementary Hues: {add_compl_hues}")
+    print(f"Add Triadic Hues: {add_triadic_hues}")
+    print(f"Add Split Complementary Hues: {add_split_hues}")
+    print(f"Add Tetradic Hues: {add_tetradic_hues}")
+    print(f"Add Double Brightness: {add_double_brightness}")
+    print(f"Downsize Image: {down_size_image}")
 
     # Load and resize the image
     if not image_path.get():
@@ -316,15 +360,18 @@ def create_color_palette():
     if image is None:
         print("Error: Could not load image. Please check the file path and try again.")
         exit()
-    
+
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    image = resize_image(image)
+
+
+    if down_size_image:
+        image = resize_image(image)
 
     # Extract top dominant colors
     top_colors, labels = extract_dominant_colors(image, k=k)
 
     # Group bottom colors
-    family_colors = group_bottom_colors(image, num_colors=num_family_colors)
+    family_colors = group_bottom_colors(image,top_colors, num_colors=num_family_colors)
 
     # Set output folder path
     if not output_folder.get():
@@ -332,6 +379,9 @@ def create_color_palette():
         output_folder_path = "./"
     else:
         output_folder_path = output_folder.get() + "/"
+    
+    # Save the processed image as "test.jpg"
+    cv2.imwrite(output_folder_path +"test.jpg", image)
 
     # Create a color palette for the top colors
     plot_color_palette(top_colors, output_file=output_folder_path + 'top_color_palette.png')
@@ -354,10 +404,6 @@ def create_color_palette():
                            output_folder_path + 'family_brightness_shifts.png',
                            output_folder_path + 'family_hue_shifts.png')
 
-    # Save individual color images showing original regions if enabled
-    if save_samples:
-        save_top_color_samples(image, top_colors, labels, output_folder=output_folder_path + 'top_color_samples')
-        save_family_color_samples(image, family_colors, labels, output_folder=output_folder_path + 'family_color_samples')
 
     print("Color palettes and combined palette created successfully.")
 
