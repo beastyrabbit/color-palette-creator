@@ -21,17 +21,17 @@ jobs:
         with:
           python-version: 3.11
 
-      # Step 3: Install dependencies and update requirements.txt
-      - name: Install dependencies
+      # Step 3: Install pipreqs
+      - name: Install pipreqs
         run: |
-          python -m venv venv
-          source venv/bin/activate
-          pip install -r requirements.txt || true
-      - name: Update requirements.txt
-        run: |
-          pip freeze > requirements.txt
+          python -m pip install pipreqs
 
-      # Step 4: Commit updated requirements.txt
+      # Step 4: Generate requirements.txt with pipreqs
+      - name: Generate requirements.txt
+        run: |
+          python -m pipreqs /github/workspace --force
+
+      # Step 5: Commit updated requirements.txt
       - name: Commit changes
         uses: EndBug/add-and-commit@v9
         with:
