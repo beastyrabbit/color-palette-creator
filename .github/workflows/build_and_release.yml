@@ -14,6 +14,8 @@ jobs:
       # Step 1: Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          path: .
 
       # Step 2: Set up Python
       - name: Set up Python 3.11
@@ -26,18 +28,31 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pyinstaller
+          pip install nuitka
 
-      # Step 4: Build executable using the .spec file
-      - name: Build executable
+      # Step 4: Install UPX for compression (optional)
+      - name: Install UPX
+        run: choco install upx -y
+
+      # Step 5: Build executable with Nuitka
+      - name: Build executable with Nuitka
         run: |
-          pyinstaller color_palette_analysis.spec
+          nuitka --standalone --onefile --windows-icon-from-ico=assets/appl.ico src/color_palette_analysis.py
+          if exist "color_palette_analysis.dist\\color_palette_analysis.exe" (move "color_palette_analysis.dist\\color_palette_analysis.exe" .)
 
-      # Step 5: Create GitHub Release
+      # Step 6: Compress executable with UPX (optional)
+      - name: Compress executable with UPX
+        if: success()
+        run: |
+          upx --best --lzma color_palette_analysis.exe
+
+      # Step 7: Create GitHub Release
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            dist/color_palette_analysis.exe
+            color_palette_analysis.exe
             src/color_palette_analysis.py
             requirements.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
