@@ -37,5 +37,4 @@ jobs:
         with:
           default_author: github_actions
           message: "Updated requirements.txt"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT }}  # Use Personal Access Token (PAT) for permission

@@ -33,10 +33,9 @@ jobs:
         run: |
           pyinstaller --onefile --windowed --icon=assets/appl.ico src/color_palette_creator.py
 
-      # Step 5: Upload executable to release
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+      # Step 5: Commit and push updated requirements.txt (using PAT for permissions)
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v9
         with:
-          files: dist/color_palette_creator.exe
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          message: "Updated requirements.txt"
+          token: ${{ secrets.PAT }}  # Use the secret you created
