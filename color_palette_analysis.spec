@@ -7,7 +7,7 @@ datas = collect_data_files('sv_ttk')
 
 a = Analysis(
     ['src/color_palette_analysis.py'],
-    pathex=[],
+    pathex=['.'],
     binaries=[],
     datas=datas,  # Include the collected data files
     hiddenimports=[],
