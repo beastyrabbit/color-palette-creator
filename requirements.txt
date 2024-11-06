@@ -1,0 +1,6 @@
+opencv-python
+numpy
+scikit-learn
+matplotlib
+tkinter
+sv_ttk
