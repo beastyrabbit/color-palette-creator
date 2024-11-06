@@ -3,8 +3,8 @@ name: Build and Release EXE
 on:
   push:
     tags:
-      - 'v*'  # Run workflow when pushing a version tag, e.g., v1.0.0
-  workflow_dispatch:  # Allow manual runs
+      - 'v*'
+  workflow_dispatch:
 
 jobs:
   build:
@@ -28,16 +28,16 @@ jobs:
           pip install -r requirements.txt
           pip install pyinstaller
 
-      # Step 4: Build executable with PyInstaller
+      # Step 4: Build executable using the .spec file
       - name: Build executable
         run: |
-          pyinstaller --onefile --windowed --icon=assets/appl.ico src/color_palette_creator.py
+          pyinstaller --onefile --windowed --optimize=2 color_palette_analysis.spec
 
       # Step 5: Create GitHub Release
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            dist/color_palette_creator.exe
-            src/color_palette_creator.py
+            dist/color_palette_analysis.exe
+            src/color_palette_analysis.py
             requirements.txt
