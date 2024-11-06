@@ -45,7 +45,7 @@ jobs:
       # Step 6: Build executable with Nuitka
       - name: Build executable with Nuitka
         run: |
-          nuitka --standalone --noinclude-upx --windows-disable-console --assume-yes-for-downloads --onefile --windows-icon-from-ico=assets/appl.ico --enable-plugin=tk-inter --enable-plugin=no-qt src/color_palette_creator.py
+          nuitka --standalone --windows-disable-console --assume-yes-for-downloads --windows-icon-from-ico=assets/appl.ico --enable-plugin=tk-inter --enable-plugin=no-qt src/color_palette_creator.py
 
       #Step 7: Compress executable with UPX (optional)
       - name: Compress executable with UPX
