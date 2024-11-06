@@ -14,8 +14,6 @@ jobs:
       # Step 1: Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v3
-        with:
-          path: .
 
       # Step 2: Set up Python
       - name: Set up Python 3.11
@@ -44,28 +42,25 @@ jobs:
           # Move UPX executable to main `upx` folder for easier access
           Move-Item -Path .\upx\*\upx.exe -Destination .\upx\upx.exe
 
-          # Check extracted UPX files
-          Get-ChildItem -Recurse .\upx
-
       # Step 5: Build executable with Nuitka
       - name: Build executable with Nuitka
         run: |
-          nuitka --standalone --onefile --windows-icon-from-ico=assets\appl.ico src\color_palette_analysis.py
-          if (Test-Path "color_palette_analysis.dist\\color_palette_analysis.exe") {
-              Move-Item -Path "color_palette_analysis.dist\\color_palette_analysis.exe" -Destination "."
+          nuitka --standalone --onefile --windows-icon-from-ico=assets/appl.ico src/color_palette_creator.py
+          if (Test-Path "color_palette_creator.dist\\color_palette_creator.exe") {
+              Move-Item -Path "color_palette_creator.dist\\color_palette_creator.exe" -Destination "."
           }
 
       # Step 6: Compress executable with UPX (optional)
       - name: Compress executable with UPX
         if: success()
         run: |
-          .\upx\upx.exe --best --lzma color_palette_analysis.exe
+          .\upx\upx.exe --best --lzma color_palette_creator.exe
 
       # Step 7: Create GitHub Release
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            color_palette_analysis.exe
-            src\color_palette_analysis.py
+            color_palette_creator.exe
+            src/color_palette_creator.py
             requirements.txt
