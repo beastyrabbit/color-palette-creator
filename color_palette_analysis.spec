@@ -1,4 +1,7 @@
 # -*- mode: python ; coding: utf-8 -*-
+import os
+
+base_path = os.path.dirname(os.path.abspath(__file__))
 
 from PyInstaller.utils.hooks import collect_data_files
 
@@ -6,18 +9,19 @@ from PyInstaller.utils.hooks import collect_data_files
 datas = collect_data_files('sv_ttk')
 
 a = Analysis(
-    ['src/color_palette_analysis.py'],
-    pathex=['.'],
+    [os.path.join(base_path, 'src', 'color_palette_analysis.py')],
+    pathex=[base_path],
     binaries=[],
-    datas=datas,  # Include the collected data files
+    datas=collect_data_files('sv_ttk'),
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=['matplotlib.tests', 'tkinter.tests'],
+    excludes=[],
     noarchive=False,
     optimize=2,
 )
+
 pyz = PYZ(a.pure)
 
 exe = EXE(
@@ -39,5 +43,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['assets/appl.ico'],
+    icon=[os.path.join(base_path, 'assets', 'appl.ico')],
 )
