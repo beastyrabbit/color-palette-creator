@@ -11,6 +11,9 @@ The Color Palette Creator Tool is a Python-based application that extracts domin
 ## Available Executable
 An executable version of the Color Palette Creator Tool is available in the releases section. You can download and run the `.exe` without needing to install Python or dependencies.
 
+## Important Note
+This tool is designed to generate a color palette rather than perform a full picture analysis. For a more detailed color analysis of an image, consider using external tools like [Color Summarizer](https://mk.bcgsc.ca/color-summarizer//).
+
 ## How to Run
 1. Clone the repository:
    ```sh
