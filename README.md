@@ -33,4 +33,4 @@ This tool is designed to generate a color palette rather than perform a full pic
 
 ## License
 This project is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) License. See the `LICENSE` file for details.
-
+[Localized License](https://creativecommons.org/licenses/by-nc-sa/4.0/)
