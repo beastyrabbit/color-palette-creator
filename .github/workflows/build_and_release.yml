@@ -30,26 +30,36 @@ jobs:
           pip install -r requirements.txt
           pip install nuitka
 
-      # Step 4: Download and Install UPX Manually
+      # Step 4: Download and Install Latest UPX
       - name: Download and Install UPX
         run: |
-          Invoke-WebRequest -Uri https://github.com/upx/upx/releases/download/v4.2.4/upx-4.2.4-win64.zip -OutFile upx.zip
+          # Fetch the latest release URL of UPX from GitHub API
+          $latestRelease = Invoke-RestMethod -Uri "https://api.github.com/repos/upx/upx/releases/latest"
+          $downloadUrl = $latestRelease.assets | Where-Object { $_.name -like "*win64.zip" } | Select-Object -ExpandProperty browser_download_url
+          
+          # Download and extract UPX
+          Invoke-WebRequest -Uri $downloadUrl -OutFile upx.zip
           Expand-Archive -Path upx.zip -DestinationPath upx
-          $env:Path += ";$PWD\upx"
 
+          # Move UPX executable to main `upx` folder for easier access
+          Move-Item -Path .\upx\*\upx.exe -Destination .\upx\upx.exe
 
+          # Check extracted UPX files
+          Get-ChildItem -Recurse .\upx
+
+      # Step 5: Build executable with Nuitka
       - name: Build executable with Nuitka
         run: |
           nuitka --standalone --onefile --windows-icon-from-ico=assets/appl.ico src/color_palette_analysis.py
           if (Test-Path "color_palette_analysis.dist\\color_palette_analysis.exe") {
               Move-Item -Path "color_palette_analysis.dist\\color_palette_analysis.exe" -Destination "."
-            }
+          }
 
       # Step 6: Compress executable with UPX (optional)
       - name: Compress executable with UPX
         if: success()
         run: |
-          upx --best --lzma color_palette_analysis.exe
+          .\upx\upx.exe --best --lzma color_palette_analysis.exe
 
       # Step 7: Create GitHub Release
       - name: Create GitHub Release
@@ -59,5 +69,3 @@ jobs:
             color_palette_analysis.exe
             src/color_palette_analysis.py
             requirements.txt
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
