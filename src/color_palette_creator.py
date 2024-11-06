@@ -340,25 +340,25 @@ def create_color_palette():
     
 
     # Output the chosen parameters to console
-    print(f"Number of Dominant Colors: {k}")
-    print(f"Number of Family Colors: {num_family_colors}")
-    print(f"Brightness Factors: {brightness_factors}")
-    print(f"Hue Shifts: {hue_shifts}")
-    print(f"Add Complementary Hues: {add_compl_hues}")
-    print(f"Add Triadic Hues: {add_triadic_hues}")
-    print(f"Add Split Complementary Hues: {add_split_hues}")
-    print(f"Add Tetradic Hues: {add_tetradic_hues}")
-    print(f"Add Double Brightness: {add_double_brightness}")
-    print(f"Downsize Image: {down_size_image}")
+    #print(f"Number of Dominant Colors: {k}")
+    #print(f"Number of Family Colors: {num_family_colors}")
+    #print(f"Brightness Factors: {brightness_factors}")
+    #print(f"Hue Shifts: {hue_shifts}")
+    #print(f"Add Complementary Hues: {add_compl_hues}")
+    #print(f"Add Triadic Hues: {add_triadic_hues}")
+    #print(f"Add Split Complementary Hues: {add_split_hues}")
+    #print(f"Add Tetradic Hues: {add_tetradic_hues}")
+    #print(f"Add Double Brightness: {add_double_brightness}")
+    #print(f"Downsize Image: {down_size_image}")
 
     # Load and resize the image
     if not image_path.get():
-        print("No image file selected. Exiting.")
+        #print("No image file selected. Exiting.")
         return
 
     image = cv2.imread(image_path.get())
     if image is None:
-        print("Error: Could not load image. Please check the file path and try again.")
+        #print("Error: Could not load image. Please check the file path and try again.")
         exit()
 
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -375,7 +375,7 @@ def create_color_palette():
 
     # Set output folder path
     if not output_folder.get():
-        print("No output folder selected. Using current directory.")
+        #print("No output folder selected. Using current directory.")
         output_folder_path = "./"
     else:
         output_folder_path = output_folder.get() + "/"
@@ -405,13 +405,8 @@ def create_color_palette():
                            output_folder_path + 'family_hue_shifts.png')
 
 
-    print("Color palettes and combined palette created successfully.")
+    #print("Color palettes and combined palette created successfully.")
 
-# Required installations:
-# pip3 install opencv-python
-# pip3 install numpy
-# pip3 install scikit-learn
-# pip3 install matplotlib
 
 # Example usage
 create_color_palette()
