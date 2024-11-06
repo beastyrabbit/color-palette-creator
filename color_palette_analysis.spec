@@ -16,7 +16,7 @@ a = Analysis(
     runtime_hooks=[],
     excludes=['matplotlib.tests', 'tkinter.tests'],
     noarchive=False,
-    optimize=0,
+    optimize=2,
 )
 pyz = PYZ(a.pure)
 

@@ -31,7 +31,7 @@ jobs:
       # Step 4: Build executable using the .spec file
       - name: Build executable
         run: |
-          pyinstaller --onefile --windowed --optimize=2 color_palette_analysis.spec
+          pyinstaller color_palette_analysis.spec
 
       # Step 5: Create GitHub Release
       - name: Create GitHub Release
