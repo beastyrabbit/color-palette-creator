@@ -45,7 +45,7 @@ jobs:
       # Step 5: Build executable with Nuitka
       - name: Build executable with Nuitka
         run: |
-          nuitka --standalone --onefile --windows-icon-from-ico=assets/appl.ico src/color_palette_creator.py
+          nuitka --standalone --onefile --windows-icon-from-ico=assets/appl.ico --enable-plugin=tk-inter src/color_palette_creator.py
           if (Test-Path "color_palette_creator.dist\\color_palette_creator.exe") {
               Move-Item -Path "color_palette_creator.dist\\color_palette_creator.exe" -Destination "."
           }
