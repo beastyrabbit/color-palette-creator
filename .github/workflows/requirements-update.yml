@@ -30,7 +30,7 @@ jobs:
       - name: Generate requirements.txt
         run: |
           pipreqs src --force
-          echo "opencv-python>=4.5.0" >> requirements.txt
+          grep -q "^opencv-python" requirements.txt || echo "opencv-python>=4.5.0" >> requirements.txt
 
 
       # Step 5: Commit updated requirements.txt
