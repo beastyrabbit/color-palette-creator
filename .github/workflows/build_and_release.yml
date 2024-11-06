@@ -47,7 +47,7 @@ jobs:
         run: |
           nuitka --standalone --plugin-enable=upx --assume-yes-for-downloads --onefile --windows-icon-from-ico=assets/appl.ico --enable-plugin=tk-inter --enable-plugin=no-qt src/color_palette_creator.py
 
-       Step 7: Compress executable with UPX (optional)
+      #Step 7: Compress executable with UPX (optional)
       - name: Compress executable with UPX
         if: success()
         run: |
