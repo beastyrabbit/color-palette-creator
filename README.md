@@ -44,7 +44,7 @@ This project is licensed under the Creative Commons Attribution-NonCommercial-Sh
 <p align="center">
   <!-- Combination 1 -->
   <a href="link_to_original_image1.png">
-    <img src="link_![017_Great_blue_turaco_at_Kibale_forest_National_Park_Photo_by_Giles_Laurent](https://github.com/user-attachments/assets/2387cc9a-7a48-4ba8-b10c-2faef1420f2d) alt="Original Image 1" width="45%">
+      <img src="https://github.com/user-attachments/assets/81c0eb7a-5ad9-4852-b8b2-3271e3a9d430" alt="Color Palette 1" width="45%">
   </a>
   <a href="link_to_color_palette_image1.png">
     <img src="link_to_color_palette_image1.png" alt="Color Palette 1" width="45%">
