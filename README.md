@@ -10,6 +10,11 @@ GOTO [EXAMPLES](#Examples)
 - Save color palettes as PNG files.
 - Easy-to-use graphical user interface.
 
+## Next up
+- Move over to C# and WinUI 3
+- Add an option to read own Colorpalette
+- Option to use custom Outputformat
+
 ## Available Executable
 An executable version of the Color Palette Creator Tool is available in the releases section. You can download and run the .exe without needing to install Python or dependencies. Please note that the .exe is currently not signed, so you may see warnings from your operating system when trying to run it.
 
