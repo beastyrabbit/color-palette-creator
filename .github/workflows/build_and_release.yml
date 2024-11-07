@@ -33,8 +33,9 @@ jobs:
           pip install -r requirements.txt
           pip install nuitka
 
-      # Step 4: Download and Install Latest UPX
-      - name: Download and Install UPX
+      # Step 4: Download and Install Latest UPX (Windows Only)
+      - name: Download and Install UPX (Windows Only)
+        if: runner.os == 'Windows'
         run: |
           # Fetch the latest release URL of UPX from GitHub API
           $latestRelease = Invoke-RestMethod -Uri "https://api.github.com/repos/upx/upx/releases/latest"
@@ -47,19 +48,32 @@ jobs:
           # Move UPX executable to main `upx` folder for easier access
           Move-Item -Path .\upx\*\upx.exe -Destination .\upx\upx.exe
 
-      # Step 6: Build executable with Nuitka
+      # Step 5: Build executable with Nuitka
       - name: Build executable with Nuitka
         run: |
-          nuitka --standalone --macos-app-icon=assets/appl.icns --upx-binary=/upx/upx.exe  --windows-console-mode=disable --enable-plugin=upx --assume-yes-for-downloads --windows-icon-from-ico=assets/appl.ico --enable-plugin=tk-inter --enable-plugin=no-qt src/color_palette_creator.py
+          if [ "$RUNNER_OS" == "Linux" ] || [ "$RUNNER_OS" == "macOS" ]; then
+            nuitka --standalone --macos-app-icon=assets/appl.icns --enable-plugin=tk-inter --enable-plugin=no-qt src/color_palette_creator.py
+          elif [ "$RUNNER_OS" == "Windows" ]; then
+            nuitka --standalone --macos-app-icon=assets/appl.icns --upx-binary=upx/upx.exe  --windows-console-mode=disable --enable-plugin=upx --assume-yes-for-downloads --windows-icon-from-ico=assets/appl.ico --enable-plugin=tk-inter --enable-plugin=no-qt src/color_palette_creator.py
+          fi
 
-#      #Step 7: Compress executable with UPX (optional)
-#      - name: Compress executable with UPX
-#        if: success()
-#        run: |
-#          .\upx\upx.exe --best --lzma color_palette_creator.dist\color_palette_creator.exe
+      # Step 6: Verify Output Files
+      - name: Verify Output Files
+        run: |
+          FILES_MISSING=0
+          if [ "$RUNNER_OS" == "Linux" ] || [ "$RUNNER_OS" == "macOS" ]; then
+            [ -f "color_palette_creator.bin" ] || FILES_MISSING=1
+          elif [ "$RUNNER_OS" == "Windows" ]; then
+            [ -f "color_palette_creator.exe" ] || FILES_MISSING=1
+          fi
+          if [ "$FILES_MISSING" -eq 1 ]; then
+            echo "One or more output files are missing. Skipping release."
+            exit 1
+          fi
 
-      # Step 8: Create GitHub Release
+      # Step 7: Create GitHub Release (if files are present)
       - name: Create GitHub Release
+        if: success()  # Only run if the previous steps were successful
         uses: softprops/action-gh-release@v1
         with:
           files: |
