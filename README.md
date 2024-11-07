@@ -56,7 +56,7 @@ Each box can be customized in terms of color count and value adjustments to matc
 <p align="center">
   <!-- Combination 1 -->
   <a href="https://commons.wikimedia.org/wiki/File:017_Great_blue_turaco_at_Kibale_forest_National_Park_Photo_by_Giles_Laurent.jpg">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/7/70/017_Great_blue_turaco_at_Kibale_forest_National_Park_Photo_by_Giles_Laurent.jpg" alt="Original Image 1" width="600px" >
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/017_Great_blue_turaco_at_Kibale_forest_National_Park_Photo_by_Giles_Laurent.jpg/2560px-017_Great_blue_turaco_at_Kibale_forest_National_Park_Photo_by_Giles_Laurent.jpg" alt="Original Image 1" width="600px" >
   </a>
   <a href="https://github.com/user-attachments/assets/3fa4ebf0-e65b-4ee5-9792-8fa6478062a4">
     <img src="https://github.com/user-attachments/assets/3fa4ebf0-e65b-4ee5-9792-8fa6478062a4" alt="Color Palette 1" width="67px">
