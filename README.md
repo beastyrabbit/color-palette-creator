@@ -86,7 +86,7 @@ Each box can be customized in terms of color count and value adjustments to matc
 <p align="center">
   <!-- Combination 4 -->
   <a href="https://commons.wikimedia.org/wiki/File:Rainbow_yarn_for_knitting,_display_in_front_of_a_needlework_shop_in_Graz,_Austria,_GW23-100.jpg">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Rainbow_yarn_for_knitting%2C_display_in_front_of_a_needlework_shop_in_Graz%2C_Austria%2C_GW23-100.jpg/2560px-Rainbow_yarn_for_knitting%2C_display_in_front_of_a_needlework_shop_in_Graz%2C_Austria%2C_GW23-100.jpg" alt="Original Image 4" width="600px">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Rainbow_yarn_for_knitting%2C_display_in_front_of_a_needlework_shop_in_Graz%2C_Austria%2C_GW23-100.jpg/2560px-Rainbow_yarn_for_knitting%2C_display_in_front_of_a_needlework_shop_in_Graz%2C_Austria%2C_GW23-100.jpg" alt="Original Image 4" width="600px" height="400px">
   </a>
   <a href="https://github.com/user-attachments/assets/b126726a-d28f-4d38-98ee-dca006c4f967">
     <img src="https://github.com/user-attachments/assets/b126726a-d28f-4d38-98ee-dca006c4f967" alt="Color Palette 4" width="67px">
@@ -96,7 +96,7 @@ Each box can be customized in terms of color count and value adjustments to matc
 <p align="center">
   <!-- Combination 5 -->
   <a href="https://commons.wikimedia.org/wiki/File:Rana_platanera_-_Boana_platanera.jpg">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/8/8f/Rana_platanera_-_Boana_platanera.jpg" alt="Original Image 5" width="600px">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/8/8f/Rana_platanera_-_Boana_platanera.jpg" alt="Original Image 5" width="600px" height="400px">
   </a>
   <a href="https://github.com/user-attachments/assets/87210282-1e6d-4a80-ba89-7380b608f5fd">
     <img src="https://github.com/user-attachments/assets/87210282-1e6d-4a80-ba89-7380b608f5fd" alt="Color Palette 5" width="67px">
@@ -106,7 +106,7 @@ Each box can be customized in terms of color count and value adjustments to matc
 <p align="center">
   <!-- Combination 6 -->
   <a href="https://commons.wikimedia.org/wiki/File:Ratargul_785_retouched.jpg">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Ratargul_785_retouched.jpg/2560px-Ratargul_785_retouched.jpg" alt="Original Image 6" width="600px">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Ratargul_785_retouched.jpg/2560px-Ratargul_785_retouched.jpg" alt="Original Image 6" width="600px" height="400px">
   </a>
   <a href="https://github.com/user-attachments/assets/8119c49e-d54b-4993-b03b-c93591171cbb">
     <img src="https://github.com/user-attachments/assets/8119c49e-d54b-4993-b03b-c93591171cbb" alt="Color Palette 6" width="67px">
