@@ -2,6 +2,8 @@
 
 The Color Palette Creator Tool is a Python-based application that extracts dominant colors from images and generates detailed color palettes with variations in brightness and hue. Useful for color analysis, design projects, and creative inspiration.
 
+GOTO [EXAMPLES](## Examples)
+
 ## Features
 - Extract dominant colors from images.
 - Generate brightness and hue variations.
