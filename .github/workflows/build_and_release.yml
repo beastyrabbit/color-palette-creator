@@ -8,7 +8,12 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+        
+    runs-on: ${{ matrix.os }}
 
     steps:
       # Step 1: Checkout repository
@@ -45,19 +50,21 @@ jobs:
       # Step 6: Build executable with Nuitka
       - name: Build executable with Nuitka
         run: |
-          nuitka --standalone --windows-console-mode=disable --assume-yes-for-downloads --windows-icon-from-ico=assets/appl.ico --enable-plugin=tk-inter --enable-plugin=no-qt src/color_palette_creator.py
+          nuitka --standalone --macos-app-icon=assets/appl.icns --upx-binary=/upx/upx.exe  --windows-console-mode=disable --enable-plugin=upx --assume-yes-for-downloads --windows-icon-from-ico=assets/appl.ico --enable-plugin=tk-inter --enable-plugin=no-qt src/color_palette_creator.py
 
-      #Step 7: Compress executable with UPX (optional)
-      - name: Compress executable with UPX
-        if: success()
-        run: |
-          .\upx\upx.exe --best --lzma color_palette_creator.dist\color_palette_creator.exe
+#      #Step 7: Compress executable with UPX (optional)
+#      - name: Compress executable with UPX
+#        if: success()
+#        run: |
+#          .\upx\upx.exe --best --lzma color_palette_creator.dist\color_palette_creator.exe
 
       # Step 8: Create GitHub Release
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            color_palette_creator.dist/color_palette_creator.exe
+            color_palette_creator.exe
+            color_palette_creator.app
+            color_palette_creator.bin
             src/color_palette_creator.py
             requirements.txt
