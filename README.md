@@ -41,62 +41,65 @@ This project is licensed under the Creative Commons Attribution-NonCommercial-Sh
 
 ## Examples
 
+
+
 <p align="center">
   <!-- Combination 1 -->
-  <a href="link_to_original_image1.png">
-      <img src="https://github.com/user-attachments/assets/81c0eb7a-5ad9-4852-b8b2-3271e3a9d430" alt="Color Palette 1" width="45%">
+  <a href="https://github.com/user-attachments/assets/81c0eb7a-5ad9-4852-b8b2-3271e3a9d430">
+    <img src="https://github.com/user-attachments/assets/81c0eb7a-5ad9-4852-b8b2-3271e3a9d430" alt="Original Image 1" width="300px">
   </a>
-  <a href="link_to_color_palette_image1.png">
-    <img src="link_to_color_palette_image1.png" alt="Color Palette 1" width="45%">
+  <a href="https://github.com/user-attachments/assets/3fa4ebf0-e65b-4ee5-9792-8fa6478062a4">
+    <img src="https://github.com/user-attachments/assets/3fa4ebf0-e65b-4ee5-9792-8fa6478062a4" alt="Color Palette 1" width="300px">
   </a>
 </p>
 
 <p align="center">
   <!-- Combination 2 -->
-  <a href="link_to_original_image2.png">
-    <img src="link_to_original_image2.png" alt="Original Image 2" width="45%">
+  <a href="https://github.com/user-attachments/assets/0515acd9-f705-48ac-9a9d-32df7c7ccab9">
+    <img src="https://github.com/user-attachments/assets/0515acd9-f705-48ac-9a9d-32df7c7ccab9" alt="Original Image 2" width="300px">
   </a>
-  <a href="link_to_color_palette_image2.png">
-    <img src="link_to_color_palette_image2.png" alt="Color Palette 2" width="45%">
+  <a href="https://github.com/user-attachments/assets/1c4fbc62-a40e-45b3-b7d8-6b06d18d77fb">
+    <img src="https://github.com/user-attachments/assets/1c4fbc62-a40e-45b3-b7d8-6b06d18d77fb" alt="Color Palette 2" width="300px">
   </a>
 </p>
 
 <p align="center">
   <!-- Combination 3 -->
-  <a href="link_to_original_image3.png">
-    <img src="link_to_original_image3.png" alt="Original Image 3" width="45%">
+  <a href="https://github.com/user-attachments/assets/608335de-0eb4-4ad8-8486-1ce79822337c">
+    <img src="https://github.com/user-attachments/assets/608335de-0eb4-4ad8-8486-1ce79822337c" alt="Original Image 3" width="300px">
   </a>
-  <a href="link_to_color_palette_image3.png">
-    <img src="link_to_color_palette_image3.png" alt="Color Palette 3" width="45%">
+  <a href="https://github.com/user-attachments/assets/1a5ca7a8-97db-4d0c-a9fc-4b95565e26f9">
+    <img src="https://github.com/user-attachments/assets/1a5ca7a8-97db-4d0c-a9fc-4b95565e26f9" alt="Color Palette 3" width="300px">
   </a>
 </p>
 
 <p align="center">
   <!-- Combination 4 -->
-  <a href="link_to_original_image4.png">
-    <img src="link_to_original_image4.png" alt="Original Image 4" width="45%">
+  <a href="https://github.com/user-attachments/assets/ff157893-bd10-444b-a4be-a262f91d310c">
+    <img src="https://github.com/user-attachments/assets/ff157893-bd10-444b-a4be-a262f91d310c" alt="Original Image 4" width="300px">
   </a>
-  <a href="link_to_color_palette_image4.png">
-    <img src="link_to_color_palette_image4.png" alt="Color Palette 4" width="45%">
+  <a href="https://github.com/user-attachments/assets/b126726a-d28f-4d38-98ee-dca006c4f967">
+    <img src="https://github.com/user-attachments/assets/b126726a-d28f-4d38-98ee-dca006c4f967" alt="Color Palette 4" width="300px">
   </a>
 </p>
 
 <p align="center">
   <!-- Combination 5 -->
-  <a href="link_to_original_image5.png">
-    <img src="link_to_original_image5.png" alt="Original Image 5" width="45%">
+  <a href="https://github.com/user-attachments/assets/572972f4-600f-43a9-baa3-f0706176bb1c">
+    <img src="https://github.com/user-attachments/assets/572972f4-600f-43a9-baa3-f0706176bb1c" alt="Original Image 5" width="300px">
   </a>
-  <a href="link_to_color_palette_image5.png">
-    <img src="link_to_color_palette_image5.png" alt="Color Palette 5" width="45%">
+  <a href="https://github.com/user-attachments/assets/87210282-1e6d-4a80-ba89-7380b608f5fd">
+    <img src="https://github.com/user-attachments/assets/87210282-1e6d-4a80-ba89-7380b608f5fd" alt="Color Palette 5" width="300px">
   </a>
 </p>
 
 <p align="center">
   <!-- Combination 6 -->
-  <a href="link_to_original_image6.png">
-    <img src="link_to_original_image6.png" alt="Original Image 6" width="45%">
+  <a href="https://github.com/user-attachments/assets/ca9a3029-65c6-4669-90b3-da02c6f0e38e">
+    <img src="https://github.com/user-attachments/assets/ca9a3029-65c6-4669-90b3-da02c6f0e38e" alt="Original Image 6" width="300px">
   </a>
-  <a href="link_to_color_palette_image6.png">
-    <img src="link_to_color_palette_image6.png" alt="Color Palette 6" width="45%">
+  <a href="https://github.com/user-attachments/assets/8119c49e-d54b-4993-b03b-c93591171cbb">
+    <img src="https://github.com/user-attachments/assets/8119c49e-d54b-4993-b03b-c93591171cbb" alt="Color Palette 6" width="300px">
   </a>
 </p>
+
