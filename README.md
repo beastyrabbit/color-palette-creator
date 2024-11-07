@@ -40,7 +40,7 @@ This project is licensed under the Creative Commons Attribution-NonCommercial-Sh
 [Localized License](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 
 ## Examples
-###Explaination
+### Explaination
 In the images below, each pair represents a comparison between an input image (left) and the resulting color palette analysis (right). The analysis image on the right contains six color boxes organized as follows:
 
 Top Colors: The first row on the right includes three boxes representing the main colors extracted from the original image:
@@ -52,7 +52,7 @@ Color Highlights: The second row contains a similar set of three boxes, but with
 
 Each box can be customized in terms of color count and value adjustments to match specific requirements.
 
-###Pictures 
+### Pictures 
 <p align="center">
   <!-- Combination 1 -->
   <a href="https://commons.wikimedia.org/wiki/File:017_Great_blue_turaco_at_Kibale_forest_National_Park_Photo_by_Giles_Laurent.jpg">
