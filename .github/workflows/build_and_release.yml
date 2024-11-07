@@ -32,6 +32,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install nuitka
+        shell: bash
 
       # Step 4: Download and Install Latest UPX (Windows Only)
       - name: Download and Install UPX (Windows Only)
@@ -46,16 +47,18 @@ jobs:
           Expand-Archive -Path upx.zip -DestinationPath upx
 
           # Move UPX executable to main `upx` folder for easier access
-          Move-Item -Path .\upx\*\upx.exe -Destination .\upx\upx.exe
+          Move-Item -Path .\upx\*\upx.exe -Destination .\upx.exe
+        shell: pwsh
 
       # Step 5: Build executable with Nuitka
       - name: Build executable with Nuitka
         run: |
           if [ "$RUNNER_OS" == "Linux" ] || [ "$RUNNER_OS" == "macOS" ]; then
-            nuitka --standalone --macos-app-icon=assets/appl.icns --enable-plugin=tk-inter --enable-plugin=no-qt src/color_palette_creator.py
+            nuitka --onefile --standalone --macos-app-icon=assets/appl.icns --enable-plugin=tk-inter --enable-plugin=no-qt src/color_palette_creator.py
           elif [ "$RUNNER_OS" == "Windows" ]; then
-            nuitka --standalone --macos-app-icon=assets/appl.icns --upx-binary=upx/upx.exe  --windows-console-mode=disable --enable-plugin=upx --assume-yes-for-downloads --windows-icon-from-ico=assets/appl.ico --enable-plugin=tk-inter --enable-plugin=no-qt src/color_palette_creator.py
+            nuitka --onefile --standalone --macos-app-icon=assets/appl.icns --upx-binary=upx.exe  --windows-console-mode=disable --enable-plugin=upx --assume-yes-for-downloads --windows-icon-from-ico=assets/appl.ico --enable-plugin=tk-inter --enable-plugin=no-qt src/color_palette_creator.py
           fi
+        shell: bash
 
       # Step 6: Verify Output Files
       - name: Verify Output Files
@@ -70,6 +73,7 @@ jobs:
             echo "One or more output files are missing. Skipping release."
             exit 1
           fi
+        shell: bash
 
       # Step 7: Create GitHub Release (if files are present)
       - name: Create GitHub Release
