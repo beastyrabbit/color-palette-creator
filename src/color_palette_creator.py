@@ -85,8 +85,8 @@ def adjust_brightness(color, factor):
 def adjust_hue(color, angle):
     r, g, b = color / 255.0
     h, l, s = colorsys.rgb_to_hls(r, g, b)
-    
     # Adjust the hue value
+    
     h = (h + angle / 360.0) % 1
     
     # Convert back to RGB
@@ -381,7 +381,7 @@ def create_color_palette():
         output_folder_path = output_folder.get() + "/"
     
     # Save the processed image as "test.jpg"
-    cv2.imwrite(output_folder_path +"test.jpg", image)
+    #cv2.imwrite(output_folder_path +"test.jpg", image)
 
     # Create a color palette for the top colors
     plot_color_palette(top_colors, output_file=output_folder_path + 'top_color_palette.png')
