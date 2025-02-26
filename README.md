@@ -39,7 +39,7 @@ This tool is designed to generate a color palette rather than perform a full pic
 
 3. Run the tool:
    ```sh
-   python color_palette_creator.py
+   python src/color_palette_creator.py
    ```
 
 ## License
